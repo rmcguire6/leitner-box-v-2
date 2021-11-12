@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.params import Body
 from pydantic import BaseModel
+from random import randrange
 
 app = FastAPI()
 
@@ -23,5 +24,7 @@ def get_cards():
 
 @app.post("/cards")
 def create_card(card: Card):
-    print(card.dict())
-    return{"data": card}
+    card_dict = card.dict()
+    card_dict['id'] = randrange(0, 1000000)
+    my_cards.append(card_dict)
+    return{"data": card_dict}

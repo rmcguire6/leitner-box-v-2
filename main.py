@@ -27,7 +27,7 @@ async def root():
 def get_cards():
     return {"data": my_cards}
 
-@app.post("/cards")
+@app.post("/cards", status_code=status.HTTP_201_CREATED)
 def create_card(card: Card):
     card_dict = card.dict()
     card_dict['id'] = randrange(0, 1000000)

@@ -54,3 +54,12 @@ def delete_card(id:int):
     my_cards.pop(index)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
+@app.put('/cards/{id}')
+def update_card(id:int, card: Card):
+    index = find_index_card(id)
+    if index == None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"card with id {id} does not exist")
+    card_dict = card.dict()
+    card_dict['id'] = id
+    my_cards[index] = card_dict
+    return {'message': 'Updated card'}

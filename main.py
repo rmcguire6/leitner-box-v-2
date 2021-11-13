@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Response, status, HTTPException
 from fastapi.params import Body
 from pydantic import BaseModel
 from random import randrange
@@ -35,6 +35,8 @@ def create_card(card: Card):
     return{"data": card_dict}
 
 @app.get('/cards/{id}')
-def get_card(id:int):
+def get_card(id:int, response: Response):
     card = find_card(id)
+    if not card:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"card with id {id} was not found")
     return {"card": card}

@@ -13,6 +13,11 @@ def find_card(id):
         if c["id"] == id:
             return c
 
+def find_index_card(id):
+    for index, c in enumerate(my_cards):
+        if c['id'] == id:
+            return index
+
 class Card(BaseModel):
     subject: str
     question: str
@@ -40,3 +45,12 @@ def get_card(id:int, response: Response):
     if not card:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"card with id {id} was not found")
     return {"card": card}
+
+@app.delete('/cards/{id}', status_code=status.HTTP_204_NO_CONTENT)
+def delete_card(id:int):
+    index = find_index_card(id)
+    if index == None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"card with id {id} does not exist")
+    my_cards.pop(index)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+

@@ -22,7 +22,7 @@ class Card(BaseModel):
     subject: str
     question: str
     answer: str
-    active: bool = True
+    is_active: bool = True
 
 @app.get("/")
 async def root():

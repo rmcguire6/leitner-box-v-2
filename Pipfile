@@ -8,5 +8,9 @@ name = "pypi"
 [requires]
 python_version = "3.8"
 
+[packages]
+SQLAlchemy = "*"
+psycopg2-binary = "*"
+
 [packages.fastapi]
 extras = [ "all",]

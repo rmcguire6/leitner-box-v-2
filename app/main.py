@@ -1,9 +1,16 @@
-from fastapi import FastAPI, Response, status, HTTPException
+from fastapi import FastAPI, Response, status, HTTPException, Depends
 from fastapi.params import Body
 from pydantic import BaseModel
 from random import randrange
+from sqlalchemy.orm import Session
+import psycopg2
+from . import models
+from .database import engine, get_db
+
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
 
 my_cards = [{"subject": "Spanish", "question": "comer", "answer": "to eat", "active": True, "id": 1},
 {"subject": "Spanish", "question": "haber", "answer": "to speak", "active": True, "id": 2}]
@@ -27,6 +34,10 @@ class Card(BaseModel):
 @app.get("/")
 async def root():
     return {"message": "Welcome to Leitner Box"}
+
+@app.get('/sqlalchemy')
+def test_cards(db: Session = Depends(get_db)):
+        return{"status": "success"}
 
 @app.get('/cards')
 def get_cards():

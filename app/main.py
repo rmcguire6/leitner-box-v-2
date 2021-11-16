@@ -35,20 +35,19 @@ class Card(BaseModel):
 async def root():
     return {"message": "Welcome to Leitner Box"}
 
-@app.get('/sqlalchemy')
-def test_cards(db: Session = Depends(get_db)):
-        return{"status": "success"}
 
 @app.get('/cards')
-def get_cards():
-    return {"data": my_cards}
+def get_cards(db: Session= Depends(get_db)):
+    cards = db.query(models.Card).all()
+    return {"data": cards}
 
 @app.post("/cards", status_code=status.HTTP_201_CREATED)
-def create_card(card: Card):
-    card_dict = card.dict()
-    card_dict['id'] = randrange(0, 1000000)
-    my_cards.append(card_dict)
-    return{"data": card_dict}
+def create_card(card: Card, db: Session= Depends(get_db)):
+    new_card = models.Card(**card.dict())
+    db.add(new_card)
+    db.commit()
+    db.refresh(new_card)
+    return{"data": new_card}
 
 @app.get('/cards/{id}')
 def get_card(id:int, response: Response):

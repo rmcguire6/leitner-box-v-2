@@ -4,19 +4,13 @@ from pydantic import BaseModel
 from random import randrange
 from sqlalchemy.orm import Session
 import psycopg2
-from . import models
+from . import models, schemas
 from .database import engine, get_db
 
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-
-class Card(BaseModel):
-    subject: str
-    question: str
-    answer: str
-    is_active: bool = True
 
 @app.get("/")
 async def root():
@@ -29,7 +23,7 @@ def get_cards(db: Session= Depends(get_db)):
     return {"data": cards}
 
 @app.post("/cards", status_code=status.HTTP_201_CREATED)
-def create_card(card: Card, db: Session = Depends(get_db)):
+def create_card(card: schemas.Card, db: Session = Depends(get_db)):
     new_card = models.Card(**card.dict())
     db.add(new_card)
     db.commit()
@@ -53,7 +47,7 @@ def delete_card(id:int, db: Session = Depends(get_db)):
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 @app.put('/cards/{id}')
-def update_card(id:int, card: Card,  db: Session = Depends(get_db)):
+def update_card(id:int, card: schemas.Card,  db: Session = Depends(get_db)):
     card_query = db.query(models.Card).filter(models.Card.card_id == id)
     found_card = card_query.first()
     if found_card == None:

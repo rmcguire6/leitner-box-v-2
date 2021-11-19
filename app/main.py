@@ -12,19 +12,6 @@ models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 
-my_cards = [{"subject": "Spanish", "question": "comer", "answer": "to eat", "active": True, "id": 1},
-{"subject": "Spanish", "question": "haber", "answer": "to speak", "active": True, "id": 2}]
-
-def find_card(id):
-    for c in my_cards:
-        if c["id"] == id:
-            return c
-
-def find_index_card(id):
-    for index, c in enumerate(my_cards):
-        if c['id'] == id:
-            return index
-
 class Card(BaseModel):
     subject: str
     question: str

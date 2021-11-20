@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from datetime import datetime
 
 class CardBase(BaseModel):
@@ -14,3 +14,9 @@ class CardOut(CardBase):
 
   class Config:
     orm_mode = True
+
+class UserCreate(BaseModel):
+  email: EmailStr
+  password: str
+  username: str
+  cards_per_day: int

@@ -20,3 +20,13 @@ class UserCreate(BaseModel):
   password: str
   username: str
   cards_per_day: int
+
+class UserOut(BaseModel):
+  user_id: int
+  email: EmailStr
+  username: str
+  cards_per_day: int
+  created_at: datetime
+
+  class Config:
+    orm_mode = True

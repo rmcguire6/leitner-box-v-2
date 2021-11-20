@@ -2,11 +2,13 @@ from typing import Optional, List
 from fastapi import FastAPI, Response, status, HTTPException, Depends
 from fastapi.params import Body
 from pydantic import BaseModel
-from random import randrange
 from sqlalchemy.orm import Session
+
 import psycopg2
-from . import models, schemas
+from . import models, schemas, utils
 from .database import engine, get_db
+
+
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -57,8 +59,10 @@ def update_card(id:int, card: schemas.CardBase,  db: Session = Depends(get_db)):
     db.commit()
     return card_query.first()
 
-@app.post("/users", status_code=status.HTTP_201_CREATED)
+@app.post("/users", status_code=status.HTTP_201_CREATED, response_model=schemas.UserOut)
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+    hashed_password = utils.hash(user.password)
+    user.password = hashed_password
     new_user = models.User(**user.dict())
     db.add(new_user)
     db.commit()

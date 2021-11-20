@@ -14,3 +14,6 @@ psycopg2-binary = "*"
 
 [packages.fastapi]
 extras = [ "all",]
+
+[packages.passlib]
+extras = [ "bcrypt",]

@@ -4,14 +4,17 @@ from sqlalchemy.orm import Session
 from .. import models, schemas
 from ..database import get_db
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/cards",
+    tags=["Cards"]
+)
 
-@router.get('/cards', response_model=List[schemas.CardOut])
+@router.get('/', response_model=List[schemas.CardOut])
 def get_cards(db: Session= Depends(get_db)):
     cards = db.query(models.Card).all()
     return cards
 
-@router.post("/cards", status_code=status.HTTP_201_CREATED, response_model= schemas.CardOut)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model= schemas.CardOut)
 def create_card(card: schemas.CardBase, db: Session = Depends(get_db)):
     new_card = models.Card(**card.dict())
     db.add(new_card)
@@ -19,14 +22,14 @@ def create_card(card: schemas.CardBase, db: Session = Depends(get_db)):
     db.refresh(new_card)
     return new_card
 
-@router.get('/cards/{id}', response_model=schemas.CardOut)
+@router.get('/{id}', response_model=schemas.CardOut)
 def get_card(id:int, db: Session = Depends(get_db)):
     card = db.query(models.Card).filter(models.Card.card_id == id).first()
     if not card:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"card with id {id} was not found")
     return card
 
-@router.delete('/cards/{id}', status_code=status.HTTP_204_NO_CONTENT)
+@router.delete('/{id}', status_code=status.HTTP_204_NO_CONTENT)
 def delete_card(id:int, db: Session = Depends(get_db)):
     card_query = db.query(models.Card).filter(models.Card.card_id == id)
     if card_query.first() == None:
@@ -35,7 +38,7 @@ def delete_card(id:int, db: Session = Depends(get_db)):
     db.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
-@router.put('/cards/{id}', response_model=schemas.CardOut)
+@router.put('/{id}', response_model=schemas.CardOut)
 def update_card(id:int, card: schemas.CardBase,  db: Session = Depends(get_db)):
     card_query = db.query(models.Card).filter(models.Card.card_id == id)
     found_card = card_query.first()

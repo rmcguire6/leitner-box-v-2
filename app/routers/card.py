@@ -15,8 +15,8 @@ def get_cards(db: Session= Depends(get_db)):
     return cards
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model= schemas.CardOut)
-def create_card(card: schemas.CardBase, db: Session = Depends(get_db), user_id: int = Depends(oauth2.get_current_user)):
-    print('user_id is ', user_id)
+def create_card(card: schemas.CardBase, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
+    print('user is ', current_user.email)
     new_card = models.Card(**card.dict())
     db.add(new_card)
     db.commit()
@@ -31,7 +31,7 @@ def get_card(id:int, db: Session = Depends(get_db)):
     return card
 
 @router.delete('/{id}', status_code=status.HTTP_204_NO_CONTENT)
-def delete_card(id:int, db: Session = Depends(get_db), user_id: int = Depends(oauth2.get_current_user)):
+def delete_card(id:int, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     card_query = db.query(models.Card).filter(models.Card.card_id == id)
     if card_query.first() == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"card with id {id} does not exist")
@@ -40,7 +40,7 @@ def delete_card(id:int, db: Session = Depends(get_db), user_id: int = Depends(oa
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 @router.put('/{id}', response_model=schemas.CardOut)
-def update_card(id:int, card: schemas.CardBase,  db: Session = Depends(get_db), user_id: int = Depends(oauth2.get_current_user)):
+def update_card(id:int, card: schemas.CardBase,  db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     card_query = db.query(models.Card).filter(models.Card.card_id == id)
     found_card = card_query.first()
     if found_card == None:

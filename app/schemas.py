@@ -12,6 +12,7 @@ class CardBase(BaseModel):
 class CardOut(CardBase):
   created_at: datetime
   card_id: int
+  creator_id: int
 
   class Config:
     orm_mode = True

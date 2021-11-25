@@ -16,8 +16,8 @@ def get_cards(db: Session= Depends(get_db)):
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model= schemas.CardOut)
 def create_card(card: schemas.CardBase, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
-    print('user is ', current_user.email)
     new_card = models.Card(**card.dict())
+    new_card.creator_id = current_user.user_id
     db.add(new_card)
     db.commit()
     db.refresh(new_card)
@@ -33,8 +33,11 @@ def get_card(id:int, db: Session = Depends(get_db)):
 @router.delete('/{id}', status_code=status.HTTP_204_NO_CONTENT)
 def delete_card(id:int, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     card_query = db.query(models.Card).filter(models.Card.card_id == id)
-    if card_query.first() == None:
+    card = card_query.first()
+    if card == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"card with id {id} does not exist")
+    if card.creator_id != current_user.user_id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to perform requested action")
     card_query.delete(synchronize_session=False)
     db.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
@@ -45,6 +48,8 @@ def update_card(id:int, card: schemas.CardBase,  db: Session = Depends(get_db), 
     found_card = card_query.first()
     if found_card == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Card with id {id} does not exist")
+    if found_card.creator_id != current_user.user_id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to perform requested action")
     card_query.update(card.dict(), synchronize_session=False)
     db.commit()
     return card_query.first()

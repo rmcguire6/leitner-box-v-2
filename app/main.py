@@ -1,13 +1,7 @@
-from fastapi import FastAPI, Response, status, HTTPException, Depends
-from fastapi.params import Body
-from pydantic import BaseModel
-from sqlalchemy.orm import Session
-
-import psycopg2
-from . import models, schemas, utils
-from .database import engine, get_db
+from fastapi import FastAPI
+from . import models
+from .database import engine
 from .routers import card, user, auth
-
 
 models.Base.metadata.create_all(bind=engine)
 

@@ -11,6 +11,7 @@ python_version = "3.8"
 [packages]
 SQLAlchemy = "*"
 psycopg2-binary = "*"
+alembic = "*"
 
 [packages.python-jose]
 extras = [ "cryptography",]

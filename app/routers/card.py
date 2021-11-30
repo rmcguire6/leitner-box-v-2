@@ -10,8 +10,8 @@ router = APIRouter(
 )
 
 @router.get('/', response_model=List[schemas.CardOut])
-def get_cards(db: Session= Depends(get_db)):
-    cards = db.query(models.Card).all()
+def get_all_users_cards(db: Session= Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
+    cards = db.query(models.Card).filter(models.Card.creator_id == current_user.user_id).all()
     return cards
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model= schemas.CardOut)

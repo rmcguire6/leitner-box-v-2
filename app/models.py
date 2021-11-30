@@ -10,6 +10,7 @@ class Card(Base):
   subject = Column(String(64), nullable=False)
   question = Column(String(120), nullable=False)
   answer = Column(String(120), nullable=False)
+  level = Column(Integer, nullable=False, default = 1)
   is_active = Column(Boolean, server_default='TRUE', nullable=False)
   created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
   creator_id = Column(Integer, ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False )
@@ -22,4 +23,5 @@ class User(Base):
   email = Column(String, nullable=False, unique=True)
   password = Column(String, nullable=False)
   cards_per_day = Column(Integer, nullable=False, default=5)
+  current_day_number = Column(Integer, nullable=False, default=1)
   created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))

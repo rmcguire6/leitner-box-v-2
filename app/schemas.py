@@ -13,6 +13,7 @@ class UserOut(BaseModel):
   email: EmailStr
   username: str
   cards_per_day: int
+  current_day_number: int
   created_at: datetime
 
   class Config:
@@ -33,7 +34,9 @@ class CardOut(CardBase):
   created_at: datetime
   card_id: int
   creator_id: int
+  level: int
   creator: UserOut
+
 
   class Config:
     orm_mode = True

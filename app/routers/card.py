@@ -5,16 +5,15 @@ from .. import models, schemas, oauth2
 from ..database import get_db
 
 router = APIRouter(
-    prefix="/cards",
     tags=["Cards"]
 )
 
-@router.get('/', response_model=List[schemas.CardOut])
+@router.get('/cards/', response_model=List[schemas.CardOut])
 def get_all_users_cards(db: Session= Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     cards = db.query(models.Card).filter(models.Card.creator_id == current_user.user_id).all()
     return cards
 
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model= schemas.CardOut)
+@router.post("/cards/", status_code=status.HTTP_201_CREATED, response_model= schemas.CardOut)
 def create_card(card: schemas.CardBase, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     new_card = models.Card(**card.dict())
     new_card.creator_id = current_user.user_id
@@ -23,7 +22,7 @@ def create_card(card: schemas.CardBase, db: Session = Depends(get_db), current_u
     db.refresh(new_card)
     return new_card
 
-@router.get('/{id}', response_model=schemas.CardOut)
+@router.get('/cards/{id}', response_model=schemas.CardOut)
 def get_card(id:int, db: Session = Depends(get_db)):
     card = db.query(models.Card).filter(models.Card.card_id == id).first()
     if not card:

@@ -46,9 +46,7 @@ def test_user(client):
     "password": "123pass"
     }
   res = client.post("/users/", json=user_data)
-  print(res.json())
   assert res.status_code == 201
   new_user = res.json()
   new_user['password'] = user_data['password']
-  print('new_user', new_user)
   return new_user

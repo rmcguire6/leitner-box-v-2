@@ -5,7 +5,6 @@ from app.config import settings
 
 def test_root(client):
   res = client.get("/")
-  print(res.json().get("message"))
   assert res.json().get("message") == 'Welcome to Leitner Box'
 
 
@@ -29,8 +28,14 @@ def test_login_user(client, test_user):
   login_res = schemas.Token(**res.json())
   payload = jwt.decode(login_res.access_token, settings.secret_key, algorithms=[settings.algorithm])
   id = payload.get("user_id")
-  print(res.json())
   assert id == test_user['user_id']
   assert login_res.token_type == 'bearer'
   assert res.status_code == 200
 
+def test_incorrect_login(test_user, client):
+  res = client.post("/login/", data={
+    "username":test_user['email'],
+    "password":"wrong password"
+  })
+  assert res.status_code == 403
+  assert res.json().get('detail') == 'Invalid Credentials'

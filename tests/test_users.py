@@ -46,7 +46,6 @@ def test_incorrect_login(test_user, client, email, password, status_code):
   })
   assert res.status_code == status_code
 
-
 def test_get_user_by_id(test_user, client):
   res = client.get("/users/1/")
   found_user = schemas.UserOut(**res.json())

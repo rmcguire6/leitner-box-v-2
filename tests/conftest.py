@@ -7,6 +7,8 @@ from app.main import app
 
 from app.config import settings
 from app.database import get_db, Base
+from app.oauth2 import create_access_token
+from app import models
 
 SQLALCHEMY_DATABASE_URL = f'postgresql://{settings.database_username}:{settings.database_password}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}_test'
 
@@ -50,3 +52,56 @@ def test_user(client):
   new_user = res.json()
   new_user['password'] = user_data['password']
   return new_user
+
+@pytest.fixture
+def token(test_user):
+  return create_access_token({"user_id": test_user['user_id']})
+
+@pytest.fixture
+def authorized_client(client, token):
+  client.headers = {
+    **client.headers,
+    "Authorization": f"Bearer {token}"
+  }
+  return client
+
+@pytest.fixture
+def test_cards(test_user, session):
+  cards_data = [{
+    "subject": "Spanish",
+    "question": "vivir",
+    "answer" : "to live",
+    "creator_id": test_user['user_id'],
+    "is_active": True
+  }, {
+    "subject": "Spanish",
+    "question": "tomar",
+    "answer" : "to take",
+    "creator_id": test_user['user_id'],
+    "is_active": True
+  },{
+    "subject": "Spanish",
+    "question": "comer",
+    "answer" : "to eat",
+    "creator_id": test_user['user_id'],
+    "is_active": True
+  },{
+    "subject": "Spanish",
+    "question": "escribir",
+    "answer" : "to write",
+    "creator_id": test_user['user_id'],
+    "is_active": True
+  }]
+
+  def create_card_model(card):
+    return models.Card(**card)
+
+  card_map = map(create_card_model, cards_data)
+  cards = list(card_map)
+
+  session.add_all(cards)
+  session.commit()
+
+  db_cards = session.query(models.Card).all()
+  return db_cards
+

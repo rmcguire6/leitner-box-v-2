@@ -23,7 +23,7 @@ def create_card(card: schemas.CardBase, db: Session = Depends(get_db), current_u
     return new_card
 
 @router.get('/cards/{id}', response_model=schemas.CardOut)
-def get_card(id:int, db: Session = Depends(get_db)):
+def get_card(id:int, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     card = db.query(models.Card).filter(models.Card.card_id == id).first()
     if not card:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"card with id {id} was not found")

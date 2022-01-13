@@ -80,4 +80,43 @@ def test_delete_non_existant_card(authorized_client, test_cards):
 def test_delete_other_user_card(authorized_client, test_cards):
   res = authorized_client.delete(f"/cards/{test_cards[3].card_id}")
   assert res.status_code == 403
-  
+
+def test_update_one_card_unauthorized_user(client, test_cards):
+  data = {
+    "subject": "French",
+    "question": "chat",
+    "answer": "cat"
+  }
+  res = client.put(f"/cards/{test_cards[0].card_id}", json=data)
+  assert res.status_code == 401
+
+def test_update_one_card(authorized_client, test_cards):
+  data = {
+    "subject": "French",
+    "question": "chat",
+    "answer": "cat"
+  }
+  res = authorized_client.put(f"/cards/{test_cards[0].card_id}", json=data)
+  updated_card = schemas.CardOut(**res.json())
+  assert res.status_code == 200
+  assert updated_card.subject == data['subject']
+  assert updated_card.question == data['question']
+  assert updated_card.answer == data['answer']
+
+def test_update_other_users_card(authorized_client, test_cards):
+  data = {
+    "subject": "French",
+    "question": "chat",
+    "answer": "cat"
+  }
+  res = authorized_client.put(f"/cards/{test_cards[3].card_id}", json=data)
+  assert res.status_code == 403
+
+def test_update_non_existant_card(authorized_client, test_cards):
+  data = {
+    "subject": "French",
+    "question": "chat",
+    "answer": "cat"
+  }
+  res = authorized_client.put(f"/cards/-99", json=data)
+  assert res.status_code == 404

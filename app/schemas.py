@@ -1,27 +1,31 @@
-from pydantic import BaseModel, EmailStr
 from datetime import datetime
 from typing import Optional
+from pydantic import BaseModel, EmailStr
+
 
 class UserCreate(BaseModel):
-  email: EmailStr
-  password: str
-  username: str
-  cards_per_day: int
+    email: EmailStr
+    password: str
+    username: str
+    cards_per_day: int
+
 
 class UserOut(BaseModel):
-  user_id: int
-  email: EmailStr
-  username: str
-  cards_per_day: int
-  current_day_number: int
-  created_at: datetime
+    user_id: int
+    email: EmailStr
+    username: str
+    cards_per_day: int
+    current_day_number: int
+    created_at: datetime
 
-  class Config:
-    orm_mode = True
+    class Config:
+        orm_mode = True
+
 
 class UserLogin(BaseModel):
-  email: EmailStr
-  password: str
+    email: EmailStr
+    password: str
+
 
 class CardBase(BaseModel):
     subject: str
@@ -31,18 +35,20 @@ class CardBase(BaseModel):
 
 
 class CardOut(CardBase):
-  created_at: datetime
-  card_id: int
-  creator_id: int
-  level: int
-  creator: UserOut
+    created_at: datetime
+    card_id: int
+    creator_id: int
+    level: int
+    creator: UserOut
 
-  class Config:
-    orm_mode = True
+    class Config:
+        orm_mode = True
+
 
 class Token(BaseModel):
-  access_token: str
-  token_type: str
+    access_token: str
+    token_type: str
+
 
 class TokenData(BaseModel):
-  user_id: Optional[str] = None
+    user_id: Optional[str] = None

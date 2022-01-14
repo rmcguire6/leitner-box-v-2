@@ -1,11 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from . import models
-from .database import engine
 from .routers import card, user, auth
 
 app = FastAPI()
-origins = ['*']
+origins = ["http://localhost:3000",
+           "localhost:3000"
+           ]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -18,8 +19,7 @@ app.include_router(card.router)
 app.include_router(user.router)
 app.include_router(auth.router)
 
+
 @app.get("/")
 async def root():
     return {"message": "Welcome to Leitner Box"}
-
-

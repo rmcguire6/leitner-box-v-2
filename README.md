@@ -1,4 +1,3 @@
-
 # LEITNER BOX Version 2
 
 ## Overview
@@ -36,7 +35,7 @@ When returning to the app the user must log in with username and password before
 
 - The user can create their new cards which are verified by the user and immediately saved to the database.
 
-- The user is sent to the practice page as soon as their new cards are added. 
+- The user is sent to the practice page as soon as their new cards are added or can go there without creating new cards.
 
 - The user can use their cards to memorize by remembering the answer, clicking the card to see the correct answer, and marking their answer right or wrong. If the user answers wrong the card is put into the undone queue.
 
@@ -47,9 +46,17 @@ When returning to the app the user must log in with username and password before
 - [x] Write epics and user stories
 - [x] Sketch page layouts
 - [x] Decide tech stack
-- [] Create Flask backend
-- [] Create database user schema
-- [] Create database card schema
-- [] Create database
-- [] Create test data and load into database
-- [] Create backend routes
+- [x] Create FastAPI backend
+- [x] Create database user schema
+- [x] Create database card schema
+- [x] Create database
+- [x] Create backend routes
+- [x] Create tests for all routes
+- [ ] Deploy back end live
+- [x] Create React boilerplate
+- [ ] Create navigation
+- [ ] Create user
+- [ ] Create cards page
+- [ ] Practice page
+- [ ] Ending page
+- [ ] User authentication

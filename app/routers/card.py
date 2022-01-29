@@ -8,6 +8,41 @@ router = APIRouter(
     tags=["Cards"]
 )
 
+@router.get('/test_cards/')
+def get_test_cards():
+    return {
+        "card_id": 1,
+        "subject": "Spanish",
+        "question": "vivir",
+        "answer" : "to live",
+        "creator_id": 1,
+        "level": 1,
+        "is_active": True
+    }, {
+        "card_id": 2,
+        "subject": "Spanish",
+        "question": "tomar",
+        "answer" : "to take",
+        "creator_id": 1,
+        "level": 1,
+        "is_active": True
+    }, {
+        "card_id": 3,
+        "subject": "Spanish",
+        "question": "comer",
+        "answer" : "to eat",
+        "creator_id": 1,
+        "level": 1,
+        "is_active": True
+    }, {
+        "card_id": 4,
+        "subject": "Spanish",
+        "question": "escribir",
+        "answer" : "to write",
+        "creator_id": 2,
+        "level": 1,
+        "is_active": True
+    }
 
 @router.get('/cards/', response_model=List[schemas.CardOut])
 def get_all_users_cards(db: Session = Depends(get_db), 

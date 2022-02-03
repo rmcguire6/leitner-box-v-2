@@ -1,48 +1,15 @@
 from typing import List
 from sqlalchemy.orm import Session
 from fastapi import Response, status, HTTPException, Depends, APIRouter
-from .. import models, schemas, oauth2
+from ..import models, schemas, oauth2, front_end_data
 from ..database import get_db
+
+
 
 router = APIRouter(
     tags=["Cards"]
 )
 
-@router.get('/test_cards/')
-def get_test_cards():
-    return {
-        "card_id": 1,
-        "subject": "Spanish",
-        "question": "vivir",
-        "answer" : "to live",
-        "creator_id": 1,
-        "level": 1,
-        "is_active": True
-    }, {
-        "card_id": 2,
-        "subject": "Spanish",
-        "question": "tomar",
-        "answer" : "to take",
-        "creator_id": 1,
-        "level": 1,
-        "is_active": True
-    }, {
-        "card_id": 3,
-        "subject": "Spanish",
-        "question": "comer",
-        "answer" : "to eat",
-        "creator_id": 1,
-        "level": 1,
-        "is_active": True
-    }, {
-        "card_id": 4,
-        "subject": "Spanish",
-        "question": "escribir",
-        "answer" : "to write",
-        "creator_id": 2,
-        "level": 1,
-        "is_active": True
-    }
 
 @router.get('/cards/', response_model=List[schemas.CardOut])
 def get_all_users_cards(db: Session = Depends(get_db), 
@@ -53,7 +20,7 @@ def get_all_users_cards(db: Session = Depends(get_db),
 
 @router.post("/cards/", status_code=status.HTTP_201_CREATED, response_model=schemas.CardOut)
 def create_card(card: schemas.CardBase, db: Session = Depends(get_db),
-                current_user: int = Depends(oauth2.get_current_user)):
+    current_user: int = Depends(oauth2.get_current_user)):
     new_card = models.Card(**card.dict())
     new_card.creator_id = current_user.user_id
     db.add(new_card)
@@ -93,3 +60,13 @@ def update_card(card_id:int, card: schemas.CardBase,  db: Session = Depends(get_
     card_query.update(card.dict(), synchronize_session=False)
     db.commit()
     return card_query.first()
+
+@router.get('/test_cards/')
+def get_test_cards():
+    res = front_end_data.front_cards()
+    return res
+@router.post('/test_cards/', status_code=status.HTTP_201_CREATED)
+def create_test_question(card=front_end_data.front_test_card()):
+    res = front_end_data.front_cards()
+    res.append(card)
+    return card

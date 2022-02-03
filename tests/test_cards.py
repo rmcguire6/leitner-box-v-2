@@ -121,6 +121,10 @@ def test_update_non_existant_card(authorized_client, test_cards):
   res = authorized_client.put(f"/cards/-99", json=data)
   assert res.status_code == 404
 
-def test_cards_route_for_frontend(client,test_cards):
+def test_cards_get_route_for_frontend(client, front_cards):
   res = client.get("/test_cards/")
   assert res.status_code == 200
+
+def test_cards_post_route_for_frontend(client, front_cards, front_test_card):
+  res = client.post("/test_cards/", json=front_test_card)
+  assert res.status_code == 201

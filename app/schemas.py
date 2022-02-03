@@ -46,3 +46,7 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     user_id: Optional[str] = None
+
+class TestCard(BaseModel):
+    card_id: int
+    question: str 

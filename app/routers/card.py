@@ -1,7 +1,7 @@
 from typing import List
 from sqlalchemy.orm import Session
-from fastapi import Response, status, HTTPException, Depends, APIRouter
-from ..import models, schemas, oauth2, front_end_data
+from fastapi import Body, Response, status, HTTPException, Depends, APIRouter
+from ..import models, schemas, oauth2
 from ..database import get_db
 
 
@@ -60,13 +60,25 @@ def update_card(card_id:int, card: schemas.CardBase,  db: Session = Depends(get_
     card_query.update(card.dict(), synchronize_session=False)
     db.commit()
     return card_query.first()
-
+front_end_cards = [{
+    "card_id": 1,
+    "question": "vivir",
+}, {
+    "card_id": 2,
+    "question": "tomar",
+}, {
+    "card_id": 3,
+    "question": "comer",
+}, {
+    "card_id": 4,
+    "question": "escribir",
+}]
 @router.get('/test_cards/')
 def get_test_cards():
-    res = front_end_data.front_cards()
-    return res
+    return front_end_cards
+
 @router.post('/test_cards/', status_code=status.HTTP_201_CREATED)
-def create_test_question(card=front_end_data.front_test_card()):
-    res = front_end_data.front_cards()
-    res.append(card)
+def create_new_test_card(card: dict = Body(...)):
+    front_end_cards.append(card)
+    print(front_end_cards)
     return card

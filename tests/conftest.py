@@ -138,5 +138,5 @@ def front_cards():
 
 @pytest.fixture
 def front_test_card():
-    new_test_card = {"card_id": 5, "question": 'hablar'}
+    new_test_card = {"card_id": 5, "question": 'hablar', "answer": 'to speak'}
     return new_test_card

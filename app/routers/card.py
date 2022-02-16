@@ -62,15 +62,19 @@ def update_card(card_id:int, card: schemas.CardBase,  db: Session = Depends(get_
     return card_query.first()
 front_end_cards = [{
     "card_id": 1,
+    "answer": 'to live',
     "question": "vivir",
 }, {
     "card_id": 2,
+    "answer": "to drink",
     "question": "tomar",
 }, {
     "card_id": 3,
+    "answer": "to eat",
     "question": "comer",
 }, {
     "card_id": 4,
+    "answer": "to write",
     "question": "escribir",
 }]
 @router.get('/test_cards/')

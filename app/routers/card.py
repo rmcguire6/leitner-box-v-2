@@ -82,7 +82,9 @@ def get_test_cards():
     return front_end_cards
 
 @router.post('/test_cards/', status_code=status.HTTP_201_CREATED)
-def create_new_test_card(card: dict = Body(...)):
+def create_new_test_card(card: dict = Body(...), ):
+    id =  len(front_end_cards) + 1
+    card['card_id'] = id
     front_end_cards.append(card)
     print(front_end_cards)
     return card

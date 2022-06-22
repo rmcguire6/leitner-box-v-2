@@ -1,16 +1,16 @@
 from typing import Optional
 from datetime import datetime
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 
 class UserCreate(BaseModel):
-    email: EmailStr
+    email: str
     password: str
     username: str
     cards_per_day: int
 
 class UserOut(BaseModel):
     user_id: int
-    email: EmailStr
+    email: str
     username: str
     cards_per_day: int
     current_day_number: int
@@ -20,7 +20,7 @@ class UserOut(BaseModel):
         orm_mode = True
 
 class UserLogin(BaseModel):
-    email: EmailStr
+    email: str
     password: str
 
 class CardBase(BaseModel):

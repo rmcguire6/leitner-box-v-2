@@ -7,7 +7,7 @@ from .database import Base
 class Card(Base):
   __tablename__ = 'cards'
   card_id = Column(Integer, primary_key=True)
-  subject = Column(String(64), nullable=False)
+  subject = Column(String(64), nullable=False, default='')
   question = Column(String(120), nullable=False)
   answer = Column(String(120), nullable=False)
   level = Column(Integer, nullable=False, default = 1)

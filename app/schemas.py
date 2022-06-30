@@ -24,7 +24,7 @@ class UserLogin(BaseModel):
     password: str
 
 class CardBase(BaseModel):
-    subject: str | None = None
+    subject: Optional[str] = None
     question: str
     answer: str
     is_active: bool = True

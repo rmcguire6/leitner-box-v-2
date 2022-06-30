@@ -61,6 +61,15 @@ def test_create_card_default_is_active_true(authorized_client, test_user):
   assert res.status_code == 201
   assert created_card.is_active == True
 
+def test_create_card_default_subject_empty(authorized_client, test_user):
+  res = authorized_client.post("/cards/", json={"subject": "", "question": "pelota", "answer": "ball"})
+  created_card = schemas.CardOut(**res.json())
+  assert created_card.subject == ""
+  assert created_card.question == "pelota"
+  assert created_card.answer == "ball"
+  assert created_card.creator_id == test_user['user_id']
+  assert res.status_code == 201
+  assert created_card.is_active == True
 def test_unauthorized_user_create_card(client):
   res = client.post("/cards/", json={"subject": "Spanish", "question": "pelota", "answer": "ball"})
   assert res.status_code == 401

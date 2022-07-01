@@ -27,15 +27,13 @@ class CardBase(BaseModel):
     subject: Optional[str] = None
     question: str
     answer: str
+    level: int = 1
     is_active: bool = True
 
-
 class CardOut(CardBase):
-    created_at: datetime
     card_id: int
     creator_id: int
-    level: int
-    creator: UserOut
+   
 
     class Config:
         orm_mode = True

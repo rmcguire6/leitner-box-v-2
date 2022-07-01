@@ -70,6 +70,7 @@ def test_create_card_default_subject_empty(authorized_client, test_user):
   assert created_card.creator_id == test_user['user_id']
   assert res.status_code == 201
   assert created_card.is_active == True
+
 def test_unauthorized_user_create_card(client):
   res = client.post("/cards/", json={"subject": "Spanish", "question": "pelota", "answer": "ball"})
   assert res.status_code == 401

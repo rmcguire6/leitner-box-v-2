@@ -3,9 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from .routers import card, user, auth
 
 # for using sqlalchemy to initialize tables
-from . import models
-from .database import engine
-models.Base.metadata.create_all(bind=engine)
+# from . import models
+# from .database import engine
+# models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 origins = ["http://localhost:3000",

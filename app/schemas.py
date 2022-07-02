@@ -6,13 +6,11 @@ class UserCreate(BaseModel):
     email: str
     password: str
     username: str
-    cards_per_day: int
 
 class UserOut(BaseModel):
     user_id: int
     email: str
     username: str
-    cards_per_day: int
     current_day_number: int
     created_at: datetime
 

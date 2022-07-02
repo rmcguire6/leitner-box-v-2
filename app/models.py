@@ -22,6 +22,5 @@ class User(Base):
   username = Column(String, nullable=False)
   email = Column(String, nullable=False, unique=True)
   password = Column(String, nullable=False)
-  cards_per_day = Column(Integer, nullable=False, default=5)
   current_day_number = Column(Integer, nullable=False, default=1)
   created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))

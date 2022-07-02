@@ -53,7 +53,6 @@ def test_get_user_by_id(test_user, client):
   assert found_user.user_id == test_user['user_id']
   assert found_user.email == test_user['email']
   assert found_user.username == test_user['username']
-  assert found_user.cards_per_day == test_user['cards_per_day']
   assert found_user.current_day_number == test_user['current_day_number']
 
 def test_incorrect_user_id(test_user, client):

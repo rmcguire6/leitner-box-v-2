@@ -11,8 +11,16 @@ class UserOut(BaseModel):
     user_id: int
     email: str
     username: str
-    current_day_number: int
+    current_day_number: int = 1
     created_at: datetime
+
+    class Config:
+        orm_mode = True
+
+class UserUpdate(BaseModel):
+    email: Optional[str] = None
+    username: Optional[str] = None
+    current_day_number: Optional[int] = None
 
     class Config:
         orm_mode = True

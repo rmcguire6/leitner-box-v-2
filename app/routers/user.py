@@ -32,3 +32,18 @@ def get_user(user_id: int, db: Session = Depends(get_db), ):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"User with id {user_id} was not found")
     return user
+
+@router.put("/users/{user_id}/", response_model=schemas.UserOut)
+def update_user(user_id: int, updatedUser: schemas.UserUpdate, db: Session = Depends(get_db), ):
+    user_query = db.query(models.User).filter(models.User.user_id == user_id)
+    db_user = user_query.first()
+    if not updatedUser.username:
+        updatedUser.username = db_user.username
+    if not updatedUser.email:
+        updatedUser.email = db_user.email
+    if not db_user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"User with id {user_id} was not found")
+    user_query.update(updatedUser.dict(), synchronize_session=False)
+    db.commit()
+    return user_query.first()

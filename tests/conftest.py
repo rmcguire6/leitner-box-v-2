@@ -44,8 +44,8 @@ def test_user(client):
   user_data = {
     "email": "abby@example.com",
     "username": "Abby",
-    "cards_per_day": 3,
-    "password": "123pass"
+    "password": "123pass",
+    "current_day_number": 1
     }
   res = client.post("/users/", json=user_data)
   assert res.status_code == 201
@@ -58,7 +58,6 @@ def test_user2(client):
   user_data = {
     "email": "burt@example.com",
     "username": "Burt",
-    "cards_per_day": 5,
     "password": "123pass"
     }
   res = client.post("/users/", json=user_data)

@@ -58,3 +58,14 @@ def test_get_user_by_id(test_user, client):
 def test_incorrect_user_id(test_user, client):
   res = client.get("/users/-5")
   assert res.status_code == 404
+
+def test_update_user(client, test_user):
+  user_data = {
+    "current_day_number": 64,
+  }
+  res = client.put(f"/users/1/", json=user_data)
+  updated_user = res.json()
+  assert updated_user['email'] == test_user['email']
+  assert updated_user['username'] == test_user['username']
+  assert updated_user['current_day_number'] == user_data['current_day_number']
+  assert res.status_code == 200

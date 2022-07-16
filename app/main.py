@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .routers import card, user, auth
+from .config import settings
 
  # using sqlalchemy to initialize tables
 from . import models
@@ -8,8 +9,7 @@ from .database import engine
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
-origins = ["http://localhost:3000",
-           "localhost:3000"
+origins = [settings.front_end_url
            ]
 
 app.add_middleware(

@@ -9,8 +9,8 @@ from .database import engine
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
-origins = [settings.front_end_url
-           ]
+
+origins = [settings.front_end_url]
 
 app.add_middleware(
     CORSMiddleware,
@@ -27,4 +27,4 @@ app.include_router(auth.router)
 
 @app.get("/")
 async def root():
-    return {"message": "Welcome to Leitner Box"}
+    return {"message": "Welcome to LeBox"}
